@@ -87,8 +87,8 @@ def display(objBox,pic,cutWidth):
 
 
     color=(255, 0, 0)
-    thickness=1
-    cv2.circle(img, (rect[0][0],rect[0][1]), point_size, point_color, thickness)
+    thickness=2
+    cv2.circle(img, (rect[0][0],rect[0][1]), point_size, point_color, 6)
     cv2.line(img, tuple(rect[0]), tuple(rect[1]), color, thickness)
     cv2.line(img, tuple(rect[1]), tuple(rect[2]), color, thickness)
     cv2.line(img, tuple(rect[2]), tuple(rect[3]), color, thickness)
@@ -125,14 +125,20 @@ def GetAnnotBoxLoc(AnotPath,className):#AnotPath VOC标注文件路径
         ObjName=Object.find('name').text
         BndBox=Object.find('robndbox')
         if className in ObjName:
-
-            cx = int(float(BndBox.find('cx').text))#-1 #-1是因为程序是按0作为起始位置的
-            cy = int(float(BndBox.find('cy').text))#-1
-            w  = int(float(BndBox.find('w').text))#-1
-            h  = int(float(BndBox.find('h').text))#-1
+            print(AnotPath)
+            # cx = int(float(BndBox.find('cx').text))#-1 #-1是因为程序是按0作为起始位置的
+            # cy = int(float(BndBox.find('cy').text))#-1
+            # w  = int(float(BndBox.find('w').text))#-1
+            # h  = int(float(BndBox.find('h').text))#-1
+            red_point1=[int(float(i)) for i in BndBox.find('red_point1').text.split(',')]
+            # red_point1 = int(float(BndBox.find('red_point1').text))#-1 #-1是因为程序是按0作为起始位置的
+            point2 =[int(float(i)) for i in BndBox.find('point2').text.split(',')]
+            point3  = [int(float(i)) for i in BndBox.find('point3').text.split(',')]
+            point4  = [int(float(i)) for i in BndBox.find('point4').text.split(',')]
             angle =float(BndBox.find('angle').text)#-1
-            BndBoxLoc=[cx,cy,w,h,angle]
-            BndBoxLoc_4point=rect_loc( BndBoxLoc[0],  BndBoxLoc[1], BndBoxLoc[2], BndBoxLoc[3],BndBoxLoc[4])
+            # BndBoxLoc=[red_point1,point2,point3,point4,angle]
+            # BndBoxLoc_4point=rect_loc( BndBoxLoc[0],  BndBoxLoc[1], BndBoxLoc[2], BndBoxLoc[3],BndBoxLoc[4])
+            BndBoxLoc_4point= [red_point1,point2,point3,point4]
             if ObjName in ObjBndBoxSet:
                 ObjBndBoxSet[ObjName].append(BndBoxLoc_4point)#如果字典结构中含有这个类别了，那么这个目标框要追加到其值的末尾
             else:
@@ -142,7 +148,7 @@ def GetAnnotBoxLoc(AnotPath,className):#AnotPath VOC标注文件路径
     ##get object annotation bndbox loc end
 
 #需要遍历的目录
-ShowDir = 'D:\CV_DATASET\DJI_result_1196_20201218\DJIB'
+ShowDir = 'D:\CV_DATASET\DJI_result_1196_20201218\DJIA'
 
 #定义listdir函数
 def listdir(path):
@@ -173,10 +179,10 @@ def listdir(path):
 '''
 if __name__== '__main__':
     # 在图片中找某一类车型
-    classname='吊车-Crane'
+    classname='消防车-Fire Truck'
     list_dir = listdir(ShowDir)
     list_dir_xml=[]
-    cutWidth=int(300/2) #设置切出来含目标的图片大小，150为正方形长度
+    cutWidth=int(150/2) #设置切出来含目标的图片大小，150为正方形长度
 
     #读取文件夹中xml文件的目录
     for i in range(len(list_dir)):
