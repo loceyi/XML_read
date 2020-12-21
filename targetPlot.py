@@ -142,7 +142,7 @@ def GetAnnotBoxLoc(AnotPath,className):#AnotPath VOC标注文件路径
     ##get object annotation bndbox loc end
 
 #需要遍历的目录
-ShowDir = 'D:\CV_DATASET\DJI_result_750_20201201\DJIB'
+ShowDir = 'D:\CV_DATASET\DJI_result_1196_20201218\DJIB'
 
 #定义listdir函数
 def listdir(path):
